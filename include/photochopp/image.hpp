@@ -1,29 +1,50 @@
 #pragma once
 
+#include <exception>
+#include <functional>
+#include <stdexcept>
 #include <string>
+#include <tuple>
 #include <utility>
+#include <vector>
 
-#include <CImg.h>
+#include <cstring>
 
-namespace cimg = cimg_library;
+#include "stb/stb_image.h"
+
+using coordinate_t = std::pair<uint, uint>;
+
+using pixel_ref_t = std::tuple<uint8_t&, uint8_t&, uint8_t&>;
+using pixel_t = std::tuple<uint8_t, uint8_t, uint8_t>;
+
+using pixel_matrix_t = std::vector<std::vector<pixel_ref_t>>;
 
 class Image {
-    cimg::CImg<uint> image;
-    std::pair<uint, uint> dimensions;
+    int channels;
+    int width, height;
+    size_t size;
+    uint8_t* data;
+    pixel_matrix_t image;
 
 public:
+    Image(const std::string&);
+
+    Image(const Image&);
+
+    Image() = delete;
+
+    ~Image();
+
+    std::pair<uint, uint> get_dimensions() const noexcept { return { width, height }; }
+
+    uint8_t* get_data_ptr() noexcept { return data; }
+
+    pixel_t get_pixel(coordinate_t) const;
+
+    void punctual_operation(std::function<pixel_t(pixel_t)>) noexcept;
+
     /**
      * 
      */
-    bool write_to_disk(const std::string& file_name) const;
-
-    std::pair<uint, uint> get_dimensions() const noexcept { return this->dimensions; }
-
-    cimg::CImg<uint>& get_cimg() const noexcept { return this->image; }
-
-    Image(const std::string& file_name);
-
-    Image(const Image& copy);
-
-    Image() = delete;
+    bool write_to_disk(const std::string&) const;
 };

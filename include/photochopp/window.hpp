@@ -11,7 +11,6 @@
 class Window {
     std::pair<uint, uint> dimensions;
     std::string name;
-    cimg::CImgDisplay window;
     int id;
 
 public:

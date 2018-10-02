@@ -27,8 +27,6 @@ bool Window::glut_initialized = false;
 } */
 
 Window::Window(Image image, std::string window_name)
-    : window(image.get_cimg())
-    , name{ window_name }
-    , dimensions{ window.width(), window.height() }
+    : name{ window_name }
 {
 }
