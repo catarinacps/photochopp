@@ -1,5 +1,7 @@
 #include "photochopp/image.hpp"
 
+namespace photochopp {
+
 Image::Image(const std::string& file_name)
     : data(stbi_load(file_name.c_str, &width, &height, &channels, 3))
     , image(height, std::vector<pixel_ref_t>(width))
@@ -49,12 +51,15 @@ void Image::punctual_operation(std::function<pixel_t(pixel_t)> operation)
 {
     for (auto& line : image) {
         for (auto& pixel : line) {
-            auto [r_new, g_new, b_new] = operation(pixel);
             auto& [r, g, b] = pixel;
 
-            r = r_new;
-            g = g_new;
-            b = b_new;
+            std::tie(r, g, b) = operation(pixel);
         }
     }
+}
+
+bool Image::write_to_disk(const std::string& path) const
+{
+    return stbi_write_jpg(path.c_str(), width, height, channels, data, 100);
+}
 }

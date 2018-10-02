@@ -1,5 +1,7 @@
 #include "photochopp/window.hpp"
 
+namespace photochopp {
+
 bool Window::glut_initialized = false;
 
 /* Window::Window(
@@ -29,4 +31,5 @@ bool Window::glut_initialized = false;
 Window::Window(Image image, std::string window_name)
     : name{ window_name }
 {
+}
 }

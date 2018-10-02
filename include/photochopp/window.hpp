@@ -1,12 +1,14 @@
 #pragma once
 
-#include "photochopp/image.hpp"
-
 #include <string>
 #include <utility>
 
 #include <GL/glut.h>
 #include <stdlib.h>
+
+#include "photochopp/image.hpp"
+
+namespace photochopp {
 
 class Window {
     std::pair<uint, uint> dimensions;
@@ -36,3 +38,4 @@ private:
 
     static void reshape(int width, int height);
 };
+}
