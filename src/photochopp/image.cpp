@@ -25,12 +25,13 @@ Image::Image(const Image& copy)
     , width(copy.width)
     , height(copy.height)
     , size(channels * width * height)
-    , data((uint8_t*)std::malloc(size))
+    , data((uint8_t*)std::malloc(size + 1))
 {
     if (!data) {
         throw std::bad_alloc();
     }
 
+    std::memset(data, 0, size + 1);
     std::memcpy(data, copy.data, size);
 }
 
