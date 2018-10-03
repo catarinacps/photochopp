@@ -43,7 +43,7 @@ std::optional<pixel_t> Image::get_pixel(coordinate_t coordinates) const
 {
     auto& [x, y] = coordinates;
 
-    return x < width and y < height ? std::optional{image[y][x]} : std::nullopt;
+    return x < width and y < height ? std::optional{ image[y][x] } : std::nullopt;
 }
 
 void Image::punctual_operation(std::function<pixel_t(pixel_t)> operation) noexcept
@@ -57,7 +57,7 @@ void Image::punctual_operation(std::function<pixel_t(pixel_t)> operation) noexce
     }
 }
 
-void Image::flip_horizontally() noexcept
+void Image::flip_vertically() noexcept
 {
     //TODO: clean up this mess of iterators
 
@@ -70,18 +70,12 @@ void Image::flip_horizontally() noexcept
     }
 }
 
-void Image::flip_vertically() noexcept
+void Image::flip_horizontally() noexcept
 {
-    //TODO: not as messy as the method above, but still, cleaning up required
-    
-    for (auto& line : image) {
-        auto front = line.begin();
-        auto back = line.rbegin();
+    //TODO: optimize this behaviour (with memcpy perhaps?)
 
-        // for every mirror pair of pixels in a line of pixels
-        for (front, back; *front != *back and *(front + 1) != *back; ++front, ++back) {
-            front->swap(*back);
-        }
+    for (auto& line : image) {
+        std::reverse(line.begin(), line.end());
     }
 }
 

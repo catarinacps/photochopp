@@ -47,9 +47,9 @@ public:
 
     void punctual_operation(std::function<pixel_t(pixel_t)>) noexcept;
 
-    void flip_horizontally() noexcept;
-
     void flip_vertically() noexcept;
+
+    void flip_horizontally() noexcept;
 
     bool write_to_disk(const std::string&) const;
 };
