@@ -2,6 +2,7 @@
 
 #include <exception>
 #include <functional>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <tuple>
@@ -42,7 +43,7 @@ public:
 
     std::pair<uint, uint> get_dimensions() const noexcept { return { width, height }; }
 
-    pixel_t get_pixel(coordinate_t) const;
+    std::optional<pixel_t> get_pixel(coordinate_t) const;
 
     void punctual_operation(std::function<pixel_t(pixel_t)>) noexcept;
 

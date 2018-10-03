@@ -39,12 +39,11 @@ Image::~Image()
     stbi_image_free(data);
 }
 
-pixel_t Image::get_pixel(coordinate_t coordinates) const
+std::optional<pixel_t> Image::get_pixel(coordinate_t coordinates) const
 {
     auto& [x, y] = coordinates;
 
-    //FIXME: invalid return value when either x or y are invalid
-    return x < width and y < height ? image[y][x] : pixel_t({ 0xff, 0xff, 0xff });
+    return x < width and y < height ? std::optional{image[y][x]} : std::nullopt;
 }
 
 void Image::punctual_operation(std::function<pixel_t(pixel_t)> operation) noexcept
@@ -65,23 +64,21 @@ void Image::flip_horizontally() noexcept
     auto front = image.begin();
     auto back = image.rbegin();
 
+    // for every mirror pair of lines in an image
     for (front, back; *front != *back and *(front + 1) != *back; ++front, ++back) {
-        auto top = front->begin();
-        auto bottom = back->begin();
-
-        for (top, bottom; top != front->end() and bottom != back->end(); ++top, ++bottom) {
-            top->swap(*bottom);
-        }
+        std::swap_ranges(front->begin(), front->end(), back->begin());
     }
 }
 
 void Image::flip_vertically() noexcept
 {
     //TODO: not as messy as the method above, but still, cleaning up required
+    
     for (auto& line : image) {
         auto front = line.begin();
         auto back = line.rbegin();
 
+        // for every mirror pair of pixels in a line of pixels
         for (front, back; *front != *back and *(front + 1) != *back; ++front, ++back) {
             front->swap(*back);
         }
