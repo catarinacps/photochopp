@@ -23,7 +23,7 @@ LIB_DIR = lib
 DFLAG = 
 
 #	Flags de compilaçao. Debug para uso no GDB
-CXX = g++ -std=c++17
+CXX = clang++ -std=c++17
 DEBUG = $(if $(DFLAG),-g -fsanitize=address)
 CXXFLAGS =\
 	-Wall \

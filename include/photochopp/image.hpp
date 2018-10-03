@@ -19,8 +19,8 @@ namespace photochopp {
 
 using coordinate_t = std::pair<uint, uint>;
 
-using pixel_ref_t = std::tuple<uint8_t&, uint8_t&, uint8_t&>;
 using pixel_t = std::tuple<uint8_t, uint8_t, uint8_t>;
+using pixel_ref_t = std::tuple<uint8_t&, uint8_t&, uint8_t&>;
 
 using pixel_matrix_t = std::vector<std::vector<pixel_ref_t>>;
 
@@ -42,11 +42,13 @@ public:
 
     std::pair<uint, uint> get_dimensions() const noexcept { return { width, height }; }
 
-    uint8_t* get_data_ptr() noexcept { return data; }
-
     pixel_t get_pixel(coordinate_t) const;
 
     void punctual_operation(std::function<pixel_t(pixel_t)>) noexcept;
+
+    void flip_horizontally() noexcept;
+
+    void flip_vertically() noexcept;
 
     bool write_to_disk(const std::string&) const;
 };

@@ -31,8 +31,7 @@ Image::Image(const Image& copy)
         throw std::bad_alloc();
     }
 
-    std::memset(data, 0, size + 1);
-    std::memcpy(data, copy.data, size);
+    std::memcpy(data, copy.data, size + 1);
 }
 
 Image::~Image()
@@ -48,13 +47,43 @@ pixel_t Image::get_pixel(coordinate_t coordinates) const
     return x < width and y < height ? image[y][x] : pixel_t({ 0xff, 0xff, 0xff });
 }
 
-void Image::punctual_operation(std::function<pixel_t(pixel_t)> operation)
+void Image::punctual_operation(std::function<pixel_t(pixel_t)> operation) noexcept
 {
     for (auto& line : image) {
         for (auto& pixel : line) {
             auto& [r, g, b] = pixel;
 
             std::tie(r, g, b) = operation(pixel);
+        }
+    }
+}
+
+void Image::flip_horizontally() noexcept
+{
+    //TODO: clean up this mess of iterators
+
+    auto front = image.begin();
+    auto back = image.rbegin();
+
+    for (front, back; *front != *back and *(front + 1) != *back; ++front, ++back) {
+        auto top = front->begin();
+        auto bottom = back->begin();
+
+        for (top, bottom; top != front->end() and bottom != back->end(); ++top, ++bottom) {
+            top->swap(*bottom);
+        }
+    }
+}
+
+void Image::flip_vertically() noexcept
+{
+    //TODO: not as messy as the method above, but still, cleaning up required
+    for (auto& line : image) {
+        auto front = line.begin();
+        auto back = line.rbegin();
+
+        for (front, back; *front != *back and *(front + 1) != *back; ++front, ++back) {
+            front->swap(*back);
         }
     }
 }
