@@ -6,7 +6,7 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 
-#include "photochopp/image.hpp"
+#include "image/image.hpp"
 
 namespace photochopp {
 

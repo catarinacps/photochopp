@@ -1,6 +1,6 @@
-#include "photochopp/image.hpp"
+#include "image/image.hpp"
 
-namespace photochopp {
+namespace image {
 
 Image::Image(const std::string& file_name)
     : data(stbi_load(file_name.c_str, &width, &height, &channels, 3))
@@ -39,20 +39,18 @@ Image::~Image()
     stbi_image_free(data);
 }
 
-std::optional<pixel_t> Image::get_pixel(coordinate_t coordinates) const
+std::optional<pixel_t> Image::get_pixel(coordinate_t coordinates) const noexcept
 {
     auto& [x, y] = coordinates;
 
     return x < width and y < height ? std::optional{ image[y][x] } : std::nullopt;
 }
 
-void Image::punctual_operation(std::function<pixel_t(pixel_t)> operation) noexcept
+void Image::apply_operation(std::function<pixel_t(pixel_t)> operation)
 {
     for (auto& line : image) {
-        for (auto& pixel : line) {
-            auto& [r, g, b] = pixel;
-
-            std::tie(r, g, b) = operation(pixel);
+        for (auto& [r, g, b] : line) {
+            std::tie(r, g, b) = operation({ r, g, b });
         }
     }
 }
