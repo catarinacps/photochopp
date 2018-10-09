@@ -21,7 +21,7 @@ namespace image {
 
 class Image {
     int channels;
-    int width, height;
+    int width = 0, height = 0;
     size_t size;
     uint8_t* data;
     pixel_matrix_t image;

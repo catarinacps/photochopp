@@ -3,8 +3,8 @@
 namespace image {
 
 Image::Image(const std::string& file_name)
-    : data(stbi_load(file_name.c_str, &width, &height, &channels, 3))
-    , image(height, std::vector<pixel_ref_t>(width))
+    : data(stbi_load(file_name.c_str(), &width, &height, &channels, 3))
+    , image(height, std::vector<pixel_t>(width))
 {
     if (!data) {
         throw std::runtime_error("Image::Image : Bad stbi_load()");
@@ -12,8 +12,8 @@ Image::Image(const std::string& file_name)
 
     size = width * height * channels;
 
-    for (uint i = 0; i < height; i++) {
-        for (uint j = 0; j < width; j++) {
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
             auto* pixel = &data[channels * (width * i + j)];
             image[i][j] = { pixel[0], pixel[1], pixel[2] };
         }
@@ -63,7 +63,7 @@ void Image::flip_vertically() noexcept
     auto back = image.rbegin();
 
     // for every mirror pair of lines in an image
-    for (front, back; *front != *back and *(front + 1) != *back; ++front, ++back) {
+    for (; *front != *back and *(front + 1) != *back; ++front, ++back) {
         std::swap_ranges(front->begin(), front->end(), back->begin());
     }
 }

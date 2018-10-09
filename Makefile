@@ -14,45 +14,46 @@
 #	Definições:
 
 #	Diretorios do projeto
-INC_DIR = include
-OBJ_DIR = bin
-OUT_DIR = build
-SRC_DIR = src
-LIB_DIR = lib
+INC_DIR := include
+OBJ_DIR := bin
+OUT_DIR := build
+SRC_DIR := src
+LIB_DIR := lib
 
-DFLAG = 
+DFLAG := 
 
 #	Flags de compilaçao. Debug para uso no GDB
-CXX = clang++ -std=c++17
-DEBUG = $(if $(DFLAG),-g -fsanitize=address)
-CXXFLAGS =\
+CXX := clang++ -std=c++17
+DEBUG := $(if $(DFLAG),-g -fsanitize=address)
+CFLAGS :=\
 	-Wall \
 	-Wextra \
+	-Wpedantic \
 	-Wshadow \
 	-Wunreachable-code
-OPT = $(if $(DFLAG),-O0,-O3)
-LIB = $(shell pkg-config --cflags --libs gtk+-3.0)\
+OPT := $(if $(DFLAG),-O0,-O3)
+LIB := $(shell pkg-config --cflags --libs gtk+-3.0)\
 	-L$(LIB_DIR)\
 	-lpthread\
 	-lm\
 	-L/usr/X11R6/lib\
 	-lX11
-INC = -I$(INC_DIR)
+INC := -I$(INC_DIR)
 
 ####################################################################################################
 #	Arquivos:
 
 #	Fonte da main
-MAIN = $(wildcard src/*.cpp)
+MAIN := $(wildcard src/*.cpp)
 
 #	Caminho do arquivo estático final
-TARGET = $(patsubst %.cpp, $(OUT_DIR)/%, $(notdir $(MAIN)))
+TARGET := $(patsubst %.cpp, $(OUT_DIR)/%, $(notdir $(MAIN)))
 
 #	Outros arquivos fonte
-SRC = # $(wildcard src/client/*.cpp)
+SRC := $(filter-out $(MAIN), $(shell find $(SRC_DIR) -name '*.cpp'))
 
 #	Objetos a serem criados
-OBJ = $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(notdir $(SRC)))
+OBJ := $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(notdir $(SRC)))
 
 ####################################################################################################
 #	Regras:
@@ -61,13 +62,13 @@ OBJ = $(patsubst %.cpp, $(OBJ_DIR)/%.o, $(notdir $(SRC)))
 $(TARGET): $(OUT_DIR)/%: $(SRC_DIR)/%.cpp $(OBJ)
 	$(CXX) -o $@ $^ $(INC) $(LIB) $(DEBUG) $(OPT)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/*/%.cpp
-	$(CXX) -c -o $@ $< $(INC) $(CXXFLAGS) $(DEBUG) $(OPT)
+$(OBJ_DIR)/%.o:
+	$(CXX) -c -o $@ $(filter %/$*.cpp, $(SRC)) $(INC) $(CFLAGS) $(DEBUG) $(OPT)
 
 ####################################################################################################
 #	Alvos:
 
-.DEFAULT_GOAL = all
+.DEFAULT_GOAL := all
 
 all: $(TARGET)
 

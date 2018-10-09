@@ -1,10 +1,10 @@
-#include "photochopp/window.hpp"
+/* #include "photochopp/window.hpp"
 
 namespace photochopp {
 
 bool Window::glut_initialized = false;
 
-/* Window::Window(
+Window::Window(
     int argc,
     char** argv,
     std::pair<uint, uint> window_position,
@@ -26,10 +26,11 @@ bool Window::glut_initialized = false;
     glutInitWindowSize(this->dimensions.first, this->dimensions.second);
     this->id = glutCreateWindow(this->name.c_str());
     glutDisplayFunc(this->display);
-} */
+}
 
-Window::Window(Image image, std::string window_name)
+Window::Window(image::Image image, std::string window_name)
     : name{ window_name }
 {
 }
 }
+ */
