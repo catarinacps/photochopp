@@ -6,22 +6,23 @@
 for par in "$@"; do
 	dep=($par)
 
-	name="include/${dep[0]}"
+	name=${dep[0]}
+	dir="include/$name"
 	target=("${dep[@]:1}")
 
-	if [ ! -d $name ]; then
-        echo "=> Dependency not found!"
-		mkdir $name
-		cd $name
+	if [ ! -d $dir ]; then
+		echo "=> Dependency '$name' not found!"
+		mkdir $dir
+		cd $dir
 
 		for url in "${target[@]}"; do
-            echo "==> Downloading $(basename $url)..."
+			echo "==> Downloading $(basename $url)..."
 			curl -O -L $url
-            echo
+			echo
 		done
 
-        echo "=> Finished downloading '${dep[0]}'!"
-        echo
+		echo "=> Finished downloading '$name'!"
+		echo
 		cd ../..
 	fi
 done
