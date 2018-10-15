@@ -17,8 +17,11 @@ for par in "$@"; do
 		for url in "${target[@]}"; do
             echo "==> Downloading $(basename $url)..."
 			curl -O -L $url
+            echo
 		done
 
+        echo "=> Finished downloading '${dep[0]}'!"
+        echo
 		cd ../..
 	fi
 done

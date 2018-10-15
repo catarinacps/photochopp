@@ -1,5 +1,5 @@
 # Dependencies
-# include/stb
+include/stb
 
 # Prerequisites
 *.d
