@@ -11,6 +11,15 @@
 #	Se make não recebe parâmetros, a ação default é all
 
 ####################################################################################################
+#	Dependências:
+
+SHELL := /bin/bash
+
+DEP_STB := stb \
+	https://github.com/nothings/stb/raw/master/stb_image_write.h \
+	https://github.com/nothings/stb/raw/master/stb_image.h
+
+####################################################################################################
 #	Definições:
 
 #	Diretorios do projeto
@@ -70,12 +79,15 @@ $(OBJ_DIR)/%.o:
 
 .DEFAULT_GOAL := all
 
-all: $(TARGET)
+all: deps $(TARGET)
+
+redo: clean all
+
+deps:
+	@./build.sh '$(DEP_STB)'
 
 clean:
 	rm -f $(OBJ_DIR)/*.o $(INC_DIR)/*~ $(TARGET) *~ *.o
-
-redo: clean all
 
 #	Debug de variaveis da make
 print-%:
